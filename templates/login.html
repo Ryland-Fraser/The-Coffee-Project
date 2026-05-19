@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='Style.css')}}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Login Page</title>
+</head>
+<body class="body-main">
+
+    <div class="header">
+        <div class="tan-line">
+            <strong>
+                {%if username == "None"%}
+                    <a class="login" href="/login">Login</a>
+                    <a class="signup" href="/signup">Sign Up</a>
+                {%elif signed_in == True%}
+                    <a class="fortune" href="/coffee-fortune">Fortune</a>
+                    <a class="reviews" href="/my-reviews">Reviews</a>
+                    <a class="account" href="/account">{{username}}</a>
+                {%else%}
+                    <a class="login" href="/login">Login</a>
+                    <a class="signup" href="/signup">Sign Up</a>
+                {% endif %}
+            </strong>
+        </div>
+        <h1 class="start-box"><a class="start-box-style" href="/">The Coffee Project</a></h1>
+        <div class="white-line"></div>
+        <a class="login" href="/login"></a>
+    </div>
+
+    <div class="login-box">
+        <h1 style="margin-top: 0;">Login</h1>
+        <hr>
+        <br>
+        <form method="POST" action="/login">
+            <div>
+            <label>Username:</label>
+            <br>
+            <input  type="text" id="username" name="username" placeholder="Username" requiered>
+            </div>
+            <br>
+            <div>
+            <label>Password:</label>
+            <br>
+            <input  type="password" id="password" name="password" placeholder="Password" requiered>
+            </div>
+            {%if error%}
+            <p style="color:red">Incorrect username or password</p>
+            {% endif %}
+            <br>
+            <a target="_self">
+            <button type="submit" class="button">
+                Login Me In!
+            </button>
+            </a>
+        </form>
+    </div>
+</body>
+</html>

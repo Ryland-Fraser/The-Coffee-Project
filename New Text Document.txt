@@ -1,0 +1,26 @@
+Plans
+
+coffee theme EVERYWHERE
+
+coffee shop fortune with coffee drink fortune
+randomly generated, same page
+
+location depended can select location and give coffee shops near there
+
+tells overall reviews averaged
+
+linked to account, with reviews for each coffee at each shop 0-10
+
+list of coffee shops in the area with addresses
+
+top reviewed places and location
+
+coffee chart
+
+
+
+design
+brown bars on side with coffee cup outline kinda of thing
+
+collage of coffee shop related pictures in the center
+

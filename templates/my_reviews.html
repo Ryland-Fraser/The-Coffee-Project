@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='Style.css')}}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <title>Your Reviews</title>
+</head>
+<body class="body-main">
+
+    <div class="header">
+        <div class="tan-line">
+            <strong>
+                {%if username == "None"%}
+                    <a class="login" href="/login">Login</a>
+                    <a class="signup" href="/signup">Sign Up</a>
+                {%elif signed_in == True%}
+                    <a class="fortune" href="/coffee-fortune">Fortune</a>
+                    <a class="reviews" href="/my-reviews">Reviews</a>
+                    <a class="account" href="/account">{{username}}</a>
+                {%else%}
+                    <a class="login" href="/login">Login</a>
+                    <a class="signup" href="/signup">Sign Up</a>
+                {% endif %}
+            </strong>
+        </div>
+        <h1 class="start-box"><a class="start-box-style" href="/">The Coffee Project</a></h1>
+        <div class="white-line"></div>
+        <a class="login" href="/login"></a>
+    </div>
+
+    <h1>Your Reviews</h1>
+
+    
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='Style.css')}}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account View</title>
+</head>
+<body class="body-main">
+
+  <div class="header">
+        <div class="tan-line">
+            <strong>
+                {%if username == "None"%}
+                    <a class="login" href="/login">Login</a>
+                    <a class="signup" href="/signup">Sign Up</a>
+                {%elif signed_in == True%}
+                    <a class="fortune" href="/coffee-fortune">Fortune</a>
+                    <a class="reviews" href="/my-reviews">Reviews</a>
+                    <a class="account" href="/account">{{username}}</a>
+                {%else%}
+                    <a class="login" href="/login">Login</a>
+                    <a class="signup" href="/signup">Sign Up</a>
+                {% endif %}
+            </strong>
+        </div>
+        <h1 class="start-box"><a class="start-box-style" href="/">The Coffee Project</a></h1>
+        <div class="white-line"></div>
+        <a class="login" href="/login"></a>
+    </div>
+
+
+    <div class="account-box">
+        <h1>Account Page</h1>
+        <hr>
+        <p>
+        ID: #{{ user[0] }}
+        <br>
+        <br>
+        Username: {{ user[1] }}
+        <br>
+        Email: {{ user[2] }}
+        <br>
+        Date of Birth: {{ user[4] }}
+        <br>
+        </p>
+        <br>
+        <form method="POST">
+            <input type="hidden" name="signout" value="True">
+            <button type="submit" class="button plain-text">
+                Logout
+            </button>
+        </form>
+    </div>
+</body>
+</html>

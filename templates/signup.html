@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="stylesheet" href="{{ url_for('static', filename='Style.css')}}">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up Page</title>
+</head>
+<body class="body-main">
+  
+  <div class="header">
+        <div class="tan-line">
+            <strong>
+                {%if username == "None"%}
+                    <a class="login" href="/login">Login</a>
+                    <a class="signup" href="/signup">Sign Up</a>
+                {%elif signed_in == True%}
+                    <a class="fortune" href="/coffee-fortune">Fortune</a>
+                    <a class="reviews" href="/my-reviews">Reviews</a>
+                    <a class="account" href="/account">{{username}}</a>
+                {%else%}
+                    <a class="login" href="/login">Login</a>
+                    <a class="signup" href="/signup">Sign Up</a>
+                {% endif %}
+            </strong>
+        </div>
+        <h1 class="start-box"><a class="start-box-style" href="/">The Coffee Project</a></h1>
+        <div class="white-line"></div>
+        <a class="login" href="/login"></a>
+    </div>
+
+  <div class="signup-box">
+    <form method="POST" action="/signup"> 
+      <h1>Create Account</h1>
+      <hr>
+      <div>
+        <label>Username:</label>
+        <br>
+          {% if username_error %}
+          <input  type="text" id="un" name="username" placeholder="Username In Use" maxlength="15" minlength="3" required>
+          {% else %}
+          <input  type="text" id="un" name="username" placeholder="JohnDoe" maxlength="15" minlength="3" required>
+          {% endif %}
+      </div>
+
+      <br>
+
+      <div>
+        <label>Email:</label>
+        <br>
+          {% if email_error %}
+            <input  type="text" id="email" name="email" placeholder="Email In Use" required>
+          {% else %}
+            <input  type="text" id="email" name="email" placeholder="" required>
+          {% endif %}
+      </div>
+
+      <br>
+
+      <div>
+        <label>Password:</label>
+        <br>
+          <input  type="password" id="pass" name="password" placeholder="Must be at least 8 characters" maxlength="25" minlength="8" required>
+      </div>
+
+      <br>
+
+      <div>
+        <label>Date of Birth:</label>
+        <br>
+        {% if dob_error %}
+          <label class="error">Please enter a valid date of birth</label>
+        {% endif %}
+        <option value="mm" selected disabled hidden>mm</option>
+        <select  id="month" name="month" default>
+          {% for month in range(1, 13) %}
+            <option value="{{ month }}">{{ month }}</option>
+          {% endfor %}
+        </select>
+        <select  id="day" name="day">
+          <option value="dd" selected disabled hidden>dd</option>
+          {% for day in range(1, 32) %}
+            <option value="{{ day }}">{{ day }}</option>
+          {% endfor %}
+        </select>
+        <select  id="year" name="year">
+          <option value="year" selected disabled hidden>year</option>
+          {% for year in range(2026, 1899, -1) %}
+            <option value="{{ year }}">{{ year }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <br>
+
+      <button type="submit" class="button">
+        Submit
+      </button>
+    </form>
+  </div>
+
+
+</body>
+</html>
