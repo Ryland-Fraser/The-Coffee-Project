@@ -6,26 +6,26 @@ This project is mainly being used as a way to learn and practice full stack web 
 
 # Technologies and Concepts Being Learned
 
-Python
-Flask
-SQLite
-HTML
-CSS
-Authentication systems
-Password hashing and security
-User accounts and login system
-Session management
-Database design and SQL
-Responsive web design
+- Python
+- Flask
+- SQLite
+- HTML
+- CSS
+- Authentication systems
+- Password hashing and security
+- User accounts and login system
+- Session management
+- Database design and SQL
+- Responsive web design
 
 # Planned Features
 
-JavaScript
-Coffee shop and drink reviews
-Personalized recommendations
-Search and filtering
-User profiles and favorites
-Mobile-friendly interface
+- JavaScript
+- Coffee shop and drink reviews
+- Personalized recommendations
+- Search and filtering
+- User profiles and favorites
+- Mobile-friendly interface
 
 # Status
 
