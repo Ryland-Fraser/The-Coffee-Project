@@ -1,14 +1,20 @@
-import sqlite3
-import os
+"""
+This module contains functions for interacting with the database to be used by the application.
+"""
 
-BASE_DIR = os.path.dirname("/home/rylan/Python Projects/Python/The-Coffee-Project/instance/users.db")
-DB_PATH = os.path.join(BASE_DIR, "users.db")
+import sqlite3
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parent
+DB_PATH = BASE_DIR / "instance" / "users.db"
 
 def get_connection():
+    """Establishes a connection to the database."""
     conn = sqlite3.connect(DB_PATH)
     return conn
 
 def init_db():
+    """Verifies that the database exists and creates it if it doesn't."""
     conn = get_connection()
     cursor = conn.cursor()
     cursor.execute("""
@@ -25,6 +31,7 @@ def init_db():
     conn.close()
 
 def add_new_user(username, email, password, dob):
+    """Adds a new user to the database."""
     conn = get_connection()
     cursor = conn.cursor()
     cursor.execute("""
@@ -33,14 +40,15 @@ def add_new_user(username, email, password, dob):
     """, (
         username,
         email,
-        password, 
+        password,
         dob
         ))
-    
+
     conn.commit()
     conn.close()
 
 def get_user_by_username(username):
+    """Retrieves a user from the database by username."""
     conn = get_connection()
     cursor = conn.cursor()
 
@@ -58,6 +66,7 @@ def get_user_by_username(username):
     return user
 
 def get_user_by_email(email):
+    """Retrieves a user from the database by email."""
     conn = get_connection()
     cursor = conn.cursor()
     cursor.execute("""
@@ -73,6 +82,7 @@ def get_user_by_email(email):
     return user
 
 def get_user_by_id(user_id):
+    """Retrieves a user from the database by ID."""
     conn = get_connection()
     cursor = conn.cursor()
     cursor.execute("""

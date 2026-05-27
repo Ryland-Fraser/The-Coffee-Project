@@ -1,8 +1,10 @@
+"""Compiles the main application."""
+
+import os
 from flask import Flask, render_template, request, redirect, session
 from database import init_db, add_new_user, get_user_by_username
 from auth import verify_login, check_email_avaliable, check_username_avaliable
 from werkzeug.security import generate_password_hash
-import os
 
 init_db()
 app = Flask(__name__)
@@ -10,6 +12,7 @@ app.secret_key = os.urandom(24)
 
 @app.context_processor
 def inject_user():
+    """Injects user information into all templates"""
     return {
         "signed_in": session.get("signed_in"),
         "username": session.get("username")
@@ -18,7 +21,7 @@ def inject_user():
 @app.route("/")
 def start():
     """Home Page"""
-    return render_template("start.html", signed_in=session.get("signed_in"), username=session.get("username"))
+    return render_template("start.html")
 
 @app.route("/signup", methods=["GET", "POST"])
 def signup():
@@ -82,7 +85,7 @@ def account():
     if session.get("username") is None:
         session["signed_in"] = False
         return redirect("/")
-    
+
     return render_template("account.html", user=get_user_by_username(session.get("username")))
 
 @app.route("/coffee-fortune")
