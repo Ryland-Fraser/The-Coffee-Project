@@ -1,4 +1,4 @@
-from Database import get_user_by_username, get_user_by_email
+from database import get_user_by_username, get_user_by_email
 from werkzeug.security import check_password_hash
 
 def verify_login(username, pass_in):

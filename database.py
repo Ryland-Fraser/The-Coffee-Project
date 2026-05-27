@@ -1,7 +1,7 @@
 import sqlite3
 import os
 
-BASE_DIR = os.path.dirname("/home/rylan/Python Projects/Python/Account Project/instance/users.db")
+BASE_DIR = os.path.dirname("/home/rylan/Python Projects/Python/The-Coffee-Project/instance/users.db")
 DB_PATH = os.path.join(BASE_DIR, "users.db")
 
 def get_connection():
