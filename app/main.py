@@ -1,13 +1,15 @@
 """Compiles the main application."""
 
 import os
+from pathlib import Path
 from flask import Flask, render_template, request, redirect, session
 from database import init_db, add_new_user, get_user_by_username
 from auth import verify_login, check_email_avaliable, check_username_avaliable
 from werkzeug.security import generate_password_hash
 
 init_db()
-app = Flask(__name__)
+BASE_DIR = Path(__file__).resolve().parent.parent
+app = Flask(__name__, template_folder=BASE_DIR / "templates", static_folder=BASE_DIR / "static")
 app.secret_key = os.urandom(24)
 
 @app.context_processor
@@ -51,6 +53,8 @@ def signup():
         add_new_user(username, email, password, dob)
         session["signed_in"] = True
         session["username"] = username
+        user = get_user_by_username(username)
+        session["acct_id"] = user[0]
         return redirect("/")
     return render_template("signup.html")
 
@@ -64,6 +68,8 @@ def login():
         if auth is True:
             session["signed_in"] = True
             session["username"] = username
+            user = get_user_by_username(username)
+            session["acct_id"] = user[0]
 
             return redirect("/")
         else:

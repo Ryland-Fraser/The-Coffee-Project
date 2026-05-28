@@ -64,7 +64,7 @@
                     Welcome to The Coffee Project!
                 </strong>
                 <hr>
-                <div>
+                <div class="home-top-body">
                     This is a website for the Edmonton area where you can:
                     <br>
                     -> Get your coffee fortune
@@ -73,20 +73,21 @@
                     <br>
                     -> Create your own coffee reviews
                 </div>
-                <br>
+                {% if username == None or signed_in == False %}
                 <div>
-                No account? 
-                <br>
-                <a href="/signup">
-                    Sign up!
-                </a>
+                    No account?
+                    <br>
+                    <a href="/signup">
+                        Sign up!
+                    </a>
+                    <br>
+                    Already have created an account?
+                    <br>
+                    <a href="/login">
+                        Login!
+                    </a>
                 </div>
-                <br>
-                Already have created an account?
-                <br>
-                <a href="/login">
-                    Login!
-                </a>
+                {% endif %}
             </div>
        </div>
     </div>

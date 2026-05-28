@@ -277,6 +277,12 @@ button {
     border-radius: 30px;
 }
 
+.home-top-body {
+    padding: 10px;
+    line-height: 2;
+    font-size: clamp(16px, 2.5vw, 20px);
+}
+
 /* ================= SIGNUP PAGE ================= */
 
 .signup-box {
@@ -338,4 +344,13 @@ button {
     padding: 40px;
     border: 5px outset #ffffff;
     border-radius: 30px;
+}
+
+.extra-txt {
+    position: absolute;
+    color:#000000;
+    text-align: center;
+    background-color: #fed4b1;
+    font-size: clamp(12px, 2.5vw, 16px);
+    left: 40%;
 }

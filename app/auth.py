@@ -1,3 +1,5 @@
+"""Authentication functions."""
+
 from database import get_user_by_username, get_user_by_email
 from werkzeug.security import check_password_hash
 
