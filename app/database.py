@@ -6,26 +6,286 @@ import sqlite3
 import requests
 from flask import session
 from pathlib import Path
+import time
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 DB_PATH = BASE_DIR / "instance" / "coffee_app.db"
 
-def api_pull():
-    """Pulls data from the Google Maps API."""
-    API_KEY = "AIzaSyD6uC-70hb66HYk22mQa2fSboXKUozjPHc"
+#-------------------------------------
 
-    url = "https://maps.googleapis.com/maps/api/place/textsearch/json"
+API_KEY = "AIzaSyD6uC-70hb66HYk22mQa2fSboXKUozjPHc"
 
-    params = {
-        "query": "coffee shops in Edmonton",
-        "key": API_KEY
-    }
+URL = "https://places.googleapis.com/v1/places:searchText"
 
-    res = requests.get(url, params=params, timeout=15)
-    data = res.json()
+HEADERS = {
+    "Content-Type": "application/json",
+    "X-Goog-Api-Key": API_KEY,
+    "X-Goog-FieldMask": "places.displayName,places.id,places.location,places.formattedAddress"
+}
 
-    print(data)
+def fetch_places(query):
+    body = {"textQuery": query}
+    all_places = []
 
+    while True:
+        res = requests.post(URL, headers=HEADERS, json=body, timeout=15)
+        data = res.json()
+
+        all_places.extend(data.get("places", []))
+
+        next_token = data.get("nextPageToken")
+        if not next_token:
+            break
+
+        time.sleep(2)
+
+        body = {
+            "textQuery": query,
+            "pageToken": next_token
+        }
+
+    return all_places
+
+def save_to_db(cursor, places):
+    for shop in places:
+
+        location = shop.get("location", {})
+
+        cursor.execute("""
+        INSERT OR IGNORE INTO shops
+        (place_id, name, address, longitude, latitude)
+        VALUES (?, ?, ?, ?, ?)
+        """, (
+            shop.get("id"),
+            shop.get("displayName", {}).get("text"),
+            shop.get("formattedAddress"),
+            location.get("longitude"),
+            location.get("latitude")
+        ))
+
+def shop_api_pull_all():
+    queries = [
+
+    # =========================
+    # EDMONTON AREA GENERIC
+    # =========================
+
+    "coffee shops in Edmonton",
+    "cafe Edmonton",
+    "espresso bar Edmonton",
+    "specialty coffee Edmonton",
+    "coffee Edmonton",
+    "coffee shop Edmonton",
+
+    "coffee shops in Sherwood Park",
+    "cafe Sherwood Park",
+    "espresso bar Sherwood Park",
+    "specialty coffee Sherwood Park",
+
+    "coffee shops in St. Albert",
+    "cafe St. Albert",
+    "espresso bar St. Albert",
+
+    "coffee shops in Leduc",
+    "cafe Leduc",
+    "espresso bar Leduc",
+
+    "coffee shops in Fort Saskatchewan",
+    "cafe Fort Saskatchewan",
+
+    "coffee shops in Spruce Grove",
+    "cafe Spruce Grove",
+
+    "coffee shops in Stony Plain",
+    "cafe Stony Plain",
+
+    "coffee shops in Beaumont Alberta",
+    "cafe Beaumont Alberta",
+
+    # =========================
+    # STARBUCKS
+    # =========================
+
+    "Starbucks Edmonton",
+    "Starbucks Sherwood Park",
+    "Starbucks St. Albert",
+    "Starbucks Leduc",
+    "Starbucks Fort Saskatchewan",
+    "Starbucks Spruce Grove",
+    "Starbucks Stony Plain",
+    "Starbucks Beaumont Alberta",
+
+    # =========================
+    # TIM HORTONS
+    # =========================
+
+    "Tim Hortons Edmonton",
+    "Tim Hortons Sherwood Park",
+    "Tim Hortons St. Albert",
+    "Tim Hortons Leduc",
+    "Tim Hortons Fort Saskatchewan",
+    "Tim Hortons Spruce Grove",
+    "Tim Hortons Stony Plain",
+    "Tim Hortons Beaumont Alberta",
+
+    # =========================
+    # SECOND CUP
+    # =========================
+
+    "Second Cup Edmonton",
+    "Second Cup Sherwood Park",
+    "Second Cup St. Albert",
+    "Second Cup Leduc",
+
+    # =========================
+    # REMEDY
+    # =========================
+
+    "Remedy Cafe Edmonton",
+    "Remedy Cafe Sherwood Park",
+    "Remedy Cafe St. Albert",
+
+    # =========================
+    # ROASTI
+    # =========================
+
+    "Roasti Coffee Edmonton",
+    "Roasti Coffee Sherwood Park",
+    "Roasti Coffee St. Albert",
+    "Roasti Coffee Leduc",
+    "Roasti Coffee Fort Saskatchewan",
+    "Roasti Coffee Spruce Grove",
+
+    # =========================
+    # TRANSCEND
+    # =========================
+
+    "Transcend Coffee Edmonton",
+    "Transcend Coffee Sherwood Park",
+    "Transcend Coffee St. Albert",
+
+    # =========================
+    # ACE COFFEE
+    # =========================
+
+    "Ace Coffee Roasters Edmonton",
+    "Ace Coffee Roasters Sherwood Park",
+    "Ace Coffee Roasters St. Albert",
+
+    # =========================
+    # ROGUE WAVE
+    # =========================
+
+    "Rogue Wave Coffee Edmonton",
+    "Rogue Wave Coffee Sherwood Park",
+    "Rogue Wave Coffee St. Albert",
+
+    # =========================
+    # SQUARE 1
+    # =========================
+
+    "Square 1 Coffee Edmonton",
+    "Square 1 Coffee Sherwood Park",
+    "Square 1 Coffee St. Albert",
+
+    # =========================
+    # THE COLOMBIAN
+    # =========================
+
+    "The Colombian Edmonton",
+    "The Colombian Sherwood Park",
+    "The Colombian St. Albert",
+    "Colombian Coffee Edmonton",
+
+    # =========================
+    # COFFEE BUREAU
+    # =========================
+
+    "Coffee Bureau Edmonton",
+    "Coffee Bureau Sherwood Park",
+    "Coffee Bureau St. Albert",
+
+    # =========================
+    # DISTRICT CAFE
+    # =========================
+
+    "District Cafe Edmonton",
+    "District Cafe Sherwood Park",
+    "District Cafe St. Albert",
+
+    # =========================
+    # WAVES
+    # =========================
+
+    "Waves Coffee Edmonton",
+    "Waves Coffee Sherwood Park",
+    "Waves Coffee St. Albert",
+
+    # =========================
+    # CAFE NEO
+    # =========================
+
+    "Cafe Neo Edmonton",
+    "Cafe Neo Sherwood Park",
+    "Cafe Neo St. Albert",
+
+    # =========================
+    # LOCK STOCK
+    # =========================
+
+    "Lock Stock Coffee Edmonton",
+    "Lock Stock Coffee Sherwood Park",
+    "Lock Stock Coffee St. Albert",
+
+    # =========================
+    # CAFE BICYCLETTE
+    # =========================
+
+    "Cafe Bicyclette Edmonton",
+
+    # =========================
+    # OTHER COMMON CHAINS
+    # =========================
+
+    "McCafe Edmonton",
+    "McCafe Sherwood Park",
+    "McCafe St. Albert",
+
+    "Good Earth Coffeehouse Edmonton",
+    "Good Earth Coffeehouse Sherwood Park",
+    "Good Earth Coffeehouse St. Albert",
+
+    "Blenz Coffee Edmonton",
+    "Blenz Coffee Sherwood Park",
+
+    "Caffiend Edmonton",
+    "Caffiend Sherwood Park",
+
+    "Dirtbag Cafe Edmonton",
+    "Dirtbag Cafe Sherwood Park"
+    ]
+
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    total = 0
+
+    for q in queries:
+        print(f"Searching: {q}")
+
+        places = fetch_places(q)
+        save_to_db(cursor, places)
+
+        conn.commit()
+
+        total += len(places)
+        print(f"Found {len(places)} places")
+
+    conn.close()
+
+    print(f"\nDone. Total raw results fetched: {total}")
+
+#-------------------------------------
 
 def get_connection():
     """Establishes a connection to the database."""
@@ -186,3 +446,20 @@ def get_user_by_id(user_id):
 
     conn.close()
     return user
+
+def show_db():
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+    SELECT name, address
+    FROM shops
+    ORDER BY name
+    """)
+
+    rows = cursor.fetchall()
+
+    for i, row in enumerate(rows, 1):
+        print(f"{i}. {row[0]} - {row[1]}")
+
+    conn.close()
